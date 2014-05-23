@@ -1,43 +1,55 @@
 package service.engineering.whereweare;
 
+import java.util.List;
+
+import rest.IUserService;
+import rest.RemoteUserService;
+import rest.UserList;
 import model.Group;
+import model.User;
 import cluster.UserItem;
 import cluster.UserRenderer;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterManager;
 
-import android.support.v7.app.ActionBarActivity;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
+
 
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-public class StartActivity extends ActionBarActivity {
+public class StartActivity extends Activity {
 	
 	
     // Google Map
     private GoogleMap googleMap;
     private ClusterManager<UserItem> mClusterManager;
+    private Button btn;
     //ClusterManager cluster;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-
+        btn = (Button)findViewById(R.id.button1);
+        btn.setOnClickListener(new View.OnClickListener() {
+        	
+        	public void onClick(View v) {
+			
+        		
+			}
+		});
       setUpMapIfNeeded();
     }
+    
 
  
     protected GoogleMap getMap() {
@@ -82,12 +94,16 @@ public class StartActivity extends ActionBarActivity {
         getMap().setOnMarkerClickListener(mClusterManager);
 
         // Add cluster items (markers) to the cluster manager.
-        addItems();
+        
+        PerformGetAllArticleTask performGetAllArticleTask = new PerformGetAllArticleTask();
+		performGetAllArticleTask.execute();
+		
+        //addItems();
     }
 
-    private void addItems() {
+    private void addItems(UserList allUsers) {
 
-    	//im ADD items Aufruf der User
+    	/*//im ADD items Aufruf der User
     	
         // Set some lat/lng coordinates to start with.
         double lat = 51.5145160;
@@ -98,13 +114,34 @@ public class StartActivity extends ActionBarActivity {
             double offset = i / 60d;
             lat = lat + offset;
             lng = lng + offset;
-            Group grp = new Group();
-            UserItem userItem = new UserItem(i,grp, "Testuser" + i,"pwd", lat, lng, "Linz", null);
+            */
+    	
+    	List<User> theusers = allUsers.getUsers();
+    	
+    	for(int i = 0; i < theusers.size(); i++)
+    	{
+    		UserItem userItem = new UserItem(theusers.get(i));
+            //Group grp = new Group();
+            //UserItem userItem = new UserItem(i,grp, "Testuser" + i,"pwd", lat, lng, "Linz", null);
             		
             //MyItem offsetItem = new MyItem(lat, lng);
             mClusterManager.addItem(userItem);
         }
     }
+    private void showDialog(String title, String message) {
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+		alertDialog.setTitle(title);
+		alertDialog.setMessage(message);
+		alertDialog.setCancelable(true);
+		alertDialog.setNeutralButton("OK",
+				new DialogInterface.OnClickListener() {
+
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+		alertDialog.show();
+	}
     
     @Override
     protected void onResume() {
@@ -148,5 +185,44 @@ public class StartActivity extends ActionBarActivity {
         }
     }
     */
+    
+    private class PerformGetAllArticleTask extends AsyncTask<Void, Void, Void> {
+		
+		UserList allUsers;
+
+		public PerformGetAllArticleTask() {
+			
+		}
+
+		/*@Override
+		protected void onPreExecute() {
+			BasketOverview.this.showProgressDialog("gettingArticle...");
+		}
+		*/
+		
+		@Override
+		protected Void doInBackground(Void... params) {
+			IUserService service = new RemoteUserService();
+			allUsers = service.getallUsers();
+			return null;
+		}
+
+		
+		@Override
+		protected void onPostExecute(Void response) {
+			//BasketOverview.this.dismissProgressDialog();
+			// TODO: check if exceptions?
+			if (allUsers != null) {
+				addItems(allUsers);
+				//addArticle(article);
+				
+				//to was
+			} else {
+				showDialog("Article not found", "Please try again.");
+			}
+		}
+
+	}
 
 }
+

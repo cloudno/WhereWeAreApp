@@ -2,6 +2,7 @@ package cluster;
 
 import android.R;
 import android.content.Context;
+import android.graphics.Color;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -24,8 +25,11 @@ public class UserRenderer extends DefaultClusterRenderer<UserItem>{
         markerOptions.title(item.getName());
         
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+        //BitmapDescriptorFactory.defaultMarker(hue);
         //markerOptions.icon(BitmapDescriptorFactory
                // .fromResource(R.drawable.ic_dialog_alert));
+       
+        //c.colorToHSV(
     }
 
     @Override

@@ -44,6 +44,11 @@
         <meta-data
                 android:name="com.google.android.maps.v2.API_KEY"
                 android:value="AIzaSyBKpSuJd9WtMgb24J-ZcCOfGL8y6aD_8T0"/>
+         <activity
+            android:name="service.engineering.whereweare.UserOverview"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name" 
+			android:launchMode="singleTask" />
         
         
         <activity

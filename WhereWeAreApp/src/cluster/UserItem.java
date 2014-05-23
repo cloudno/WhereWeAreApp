@@ -123,6 +123,12 @@ public class UserItem extends User implements ClusterItem {
 		this.id = id;
 	}
 
+	public LatLng getPosition() {
+		LatLng  latn = new LatLng(this.lat, this.lng);
+		return latn;
+	}
+
+	/*
 	@Override
 	public LatLng getPosition() {
 		
@@ -130,6 +136,6 @@ public class UserItem extends User implements ClusterItem {
 		// TODO Auto-generated method stub
 		return latn;
 	}
-	
+	*/
 
 }
