@@ -1,6 +1,9 @@
-package model;
+package cluster;
 
 import java.util.Date;
+
+import model.Group;
+import model.User;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;

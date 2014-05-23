@@ -1,7 +1,8 @@
 package service.engineering.whereweare;
 
 import model.Group;
-import model.UserItem;
+import cluster.UserItem;
+import cluster.UserRenderer;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -72,7 +73,9 @@ public class StartActivity extends ActionBarActivity {
         // Initialize the manager with the context and the map.
         // (Activity extends context, so we can pass 'this' in the constructor.)
         mClusterManager = new ClusterManager<UserItem>(this, getMap());
+         mClusterManager.setRenderer(new UserRenderer(this, getMap(), mClusterManager));
 
+        
         // Point the map's listeners at the listeners implemented by the cluster
         // manager.
         getMap().setOnCameraChangeListener(mClusterManager);
@@ -84,6 +87,8 @@ public class StartActivity extends ActionBarActivity {
 
     private void addItems() {
 
+    	//im ADD items Aufruf der User
+    	
         // Set some lat/lng coordinates to start with.
         double lat = 51.5145160;
         double lng = -0.1270060;
